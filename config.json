@@ -1,0 +1,15 @@
+{
+    "instagram_settings": {
+        "username": "your_username",
+        "password": "your_passwords",
+        "text_message": "Find Jesus bitches"
+    },
+
+    "script_settings": {
+        "use_proxy": false,
+        "proxy_type": "https",
+        "threading": 10,
+        "message_amount": 1
+    }
+}
+
