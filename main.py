@@ -156,6 +156,9 @@ def main():
         elif account_config["action"] == "dm":
             # Call the function to DM users with this account_config
             dm_users(account_config)
+        elif account_config["action"] == "fd":
+            follow_users(account_config)
+            dm_users(account_config)
         # You can add more conditions for other actions as needed
 
 
