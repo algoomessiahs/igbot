@@ -3,28 +3,7 @@ from tabnanny import check
 from instagrapi import Client
 from bs4 import BeautifulSoup
 
-config = json.loads(open("./config.json", "r", encoding="utf-8").read())
-proxies = open("./proxies.txt", "+r", encoding="utf-8").read().splitlines()
-
-
-# abstraction
-class color:
-    GREEN = "\033[92m"
-    YELLOW = "\033[93m"
-    RED = "\033[91m"
-    RESET_ALL = "\033[0m"
-    BLUE = '\033[96m'
-
-
-# abstraction
-def user_handler():
-    with open("./usernames.txt", encoding="utf-8") as f:
-        lines = f.readlines()
-        tokens = []
-        for splines in lines:
-            hdr = splines.split("\n")[0]
-            tokens.append(hdr)
-    return tokens
+import main as abs
 
 
 
@@ -34,6 +13,7 @@ def follow(username, password, proxy, userdm, i):
         password = password
 
         cl = Client()
+        config = abs.load_config()
         if config["script_settings"]["use_proxy"]:
             cl.set_proxy(proxy["https"])
         cl.login(username, password)
@@ -41,10 +21,10 @@ def follow(username, password, proxy, userdm, i):
 
         a = cl.user_follow(userid)
         print(
-            f"{color.GREEN}[{i}] {color.RESET_ALL}Followed succesfully {color.GREEN}@{userdm} {color.RESET_ALL}with {color.GREEN}@{username}{color.RESET_ALL}.")
+            f"{abs.Color.GREEN}[{i}] {abs.Color.RESET_ALL}Followed succesfully {abs.Color.GREEN}@{userdm} {abs.Color.RESET_ALL}with {abs.Color.GREEN}@{username}{abs.Color.RESET_ALL}.")
     except Exception as err:
         print(
-            f"{color.RED}[{i}]{color.RESET_ALL} An error occured when sending message to {color.RED}@{userdm} {color.RESET_ALL}account. Passing. ERROR: {err}")
+            f"{abs.Color.RED}[{i}]{abs.Color.RESET_ALL} An error occured when sending message to {abs.Color.RED}@{userdm} {abs.Color.RESET_ALL}account. Passing. ERROR: {err}")
         pass
 
 
@@ -53,39 +33,48 @@ def follow(username, password, proxy, userdm, i):
 
 
 # abstraction
-def start(thread):
+def startfollow(username, password, usernames):
     try:
+        config = abs.load_config()
+        proxies = abs.load_proxies()
         tx = []
 
-        for id, user_name in enumerate(user_handler()):
-
+        for id, user_name in enumerate(usernames):
             pp = None
-            while pp is None:
-                try:
-                    prox = {"http": f"http://{random.choice(proxies)}",
-                            "https": f"{config['script_settings']['proxy_type']}://{random.choice(proxies)}"}
-                    a = requests.get("http://ip-api.com/json/", proxies=prox, timeout=7, verify=False)
-                    pp = prox
-                    print(
-                        f"{color.GREEN}[{id + 1}] Proxy is working. IP: {a.json()['query']} | COUNTRY: {a.json()['country']} {color.RESET_ALL}")
-                except:
-                    print(f"{color.RED}[{id + 1}] Bad proxy. {prox['https']}")
-                    pass
+            if config.get("script_settings", {}).get("use_proxy"):
+                while pp is None:
+                    try:
+                        proxy = {"http": f"http://{random.choice(proxies)}",
+                                 "https": f"{config.get('script_settings', {}).get('proxy_type')}://{random.choice(proxies)}"}
+                        response = requests.get("http://ip-api.com/json/", proxies=proxy, timeout=7, verify=False)
+                        pp = proxy
+                        print(
+                            f"{abs.Color.GREEN}[{id + 1}] Proxy is working. IP: {response.json()['query']} | COUNTRY: {response.json()['country']} {abs.Color.RESET_ALL}")
+                    except:
+                        print(f"{abs.Color.RED}[{id + 1}] Bad proxy. {proxy['https']}")
+                        pass
 
-            if config["script_settings"]["use_proxy"]:
-
-                if threading.active_count() <= thread:
+            if config.get("script_settings", {}).get("use_proxy"):
+                if threading.active_count() <= config.get("script_settings", {}).get("threading"):
                     mT = threading.Thread(target=follow, args=(
-                    config["instagram_settings"]["username"], config["instagram_settings"]["password"], pp, user_name,
-                    id + 1))
+                        username,
+                        password,
+                        pp,
+                        user_name,
+                        id + 1))
+
                     mT.daemon = True
                     mT.start()
                     tx.append(mT)
             else:
-                if threading.active_count() <= thread:
+                if threading.active_count() <= config.get("script_settings", {}).get("threading"):
                     mT = threading.Thread(target=follow, args=(
-                    config["instagram_settings"]["username"], config["instagram_settings"]["password"], None, user_name,
-                    id + 1))
+                        username,
+                        password,
+                        None,
+                        user_name,
+                        id + 1))
+
                     mT.daemon = True
                     mT.start()
                     tx.append(mT)
@@ -104,10 +93,10 @@ if __name__ == "__main__":
     os.system("cls" if os.name == "nt" else "clear")
     check = [True]
     if check[0]:
-        print(f"{color.GREEN}[+] follow starting... {color.RESET_ALL}")
+        print(f"{abs.Color.GREEN}[+] follow starting... {abs.Color.RESET_ALL}")
         time.sleep(2)
         os.system("cls" if os.name == "nt" else "clear")
-        print(fr"""{color.GREEN}
+        print(fr"""{abs.Color.GREEN}
     .__                 __              .___       You don't exist ✝
     |__| ____   _______/  |______     __| _/_____  
     |  |/    \ /  ___/\   __\__  \   / __ |/     \ 
@@ -116,16 +105,16 @@ if __name__ == "__main__":
             \/     \/            \/      \/     \/ 
 
     Running . . . Hit a key and enter to start...
-    {color.RESET_ALL}    """)
+    {abs.Color.RESET_ALL}    """)
         input("....")
 
         try:
-            start(config["script_settings"]["threading"])
+            startfollow()
             input("....")
         except:
             traceback.print_exc()
             input(".....")
     else:
-        print(f"{color.RED}[-] {check[1]} {color.RESET_ALL}")
+        print(f"{abs.Color.RED}[-] {check[1]} {abs.Color.RESET_ALL}")
         input("....")
 

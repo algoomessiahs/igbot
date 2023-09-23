@@ -1,8 +1,33 @@
 {
+
+
+    "accounts": [
+        {
+            "username": "",
+            "password": "",
+            "action": "dm",
+            "use_proxy": false,
+            "proxy_type": "https",
+            "threading": 10,
+            "message_amount": 1,
+            "message": ""
+        },
+        {
+            "username": "",
+            "password": "",
+            "action": "follow",
+            "use_proxy": false,
+            "proxy_type": "https",
+            "threading": 10,
+            "message_amount": 1
+        }
+    ],
+
+
     "instagram_settings": {
-        "username": "your_username",
-        "password": "your_passwords",
-        "text_message": "Find Jesus bitches"
+        "username": "",
+        "password": "",
+        "text_message": "Def msg"
     },
 
     "script_settings": {

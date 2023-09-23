@@ -1,5 +1,4 @@
 
-# first version of the bot pretty basic stuff
 
 # SETUP:
 
@@ -26,20 +25,42 @@
 
 ````
 
-````usernames
-        pass in all the usernames u wish to sent a dm/follow/unfollow, each username each line
-````
-
-
-# for version 2
-- for the usernames to be scraped based on location or wtv needs u have
-
+usernames.txt 
+pass in all the usernames u wish to sent a dm/follow/unfollow, each username each line
+```
+user1
+user2
+user3
+```
 
 
 # Running instrctions
-- make sure u have python interpreter on your system, to check run $ python --version
+- u can control all the run settings from the config file and run main.py
+- for different user accounts to target different set of people u must add another set of usernames as a new file
+- make sure u have python interpreter on your system, to check run
+```commandline
+python --version
+```
 - clone the repo either with git or download and extract the zip
-- open your terminal and cd into the project directory $ cd path/to/ig-bot
-- once in the directory run $ pip install -r requirements.txt
+```commandline
+git clone https://github.com/algoomessiahs/igbot.git
+```
+- open your terminal and cd into the project directory
+```commandline
+cd path/to/ig-bot
+```
+- once in the directory run
+```commandline
+pip install -r requirements.txt
+or
+pip install instagrapi pymongo bs4
+```
+you can do the same with any missing packages
+```commandline
+pip install missingpackage
+```
 - once all ur configurations are setup properly
-- then run $ python main.py
+- then run
+```commandline
+python main.py
+```

