@@ -64,3 +64,10 @@ pip install missingpackage
 ```commandline
 python main.py
 ```
+# Contact
+@mrlight77
+on telegram
+
+# Show Your Support
+
+* Donate To Me VIA eth(erc20): 0x19d13b73d24CE5b6F6E0b5F77EdC29dbB7266D60
